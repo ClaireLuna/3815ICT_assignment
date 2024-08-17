@@ -54,6 +54,10 @@ public class MainScreen {
     highScoresButton.setPreferredSize(new Dimension(200, 50));
     highScoresButton.setMaximumSize(new Dimension(200, 50));
     highScoresButton.setFocusPainted(false);
+    highScoresButton.addActionListener(e -> {
+      ScoreScreen scoreScreen = new ScoreScreen(frame);
+      scoreScreen.showScoreScreen();
+    });
     panel.add(Box.createRigidArea(new Dimension(0, 20)));
     panel.add(highScoresButton);
 
