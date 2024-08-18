@@ -3,15 +3,37 @@ import java.awt.geom.Point2D;
 
 public class Tetronimo {
   public static Shapes[] shapesArray = Shapes.values();
+  private final Shapes shape;
   public Point2D[] blockPositions;
   public Color color;
+
+  public Tetronimo(Tetronimo tetronimo) {
+    this.color = tetronimo.color;
+    this.blockPositions = new Point2D[tetronimo.blockPositions.length];
+    this.shape = tetronimo.shape;
+
+    for (int i = 0; i < tetronimo.blockPositions.length; i++) {
+      this.blockPositions[i] = (Point2D) tetronimo.blockPositions[i].clone();
+    }
+  }
 
   public enum Shapes {
     O, I, S, Z, L, J, T
   }
 
+  public void rotate() {
+    if (shape != Shapes.O) {
+      for (Point2D blockPosition : blockPositions) {
+        double x = blockPosition.getX();
+        double y = blockPosition.getY();
+        blockPosition.setLocation(-y, x);
+      }
+    }
+  }
+
   public Tetronimo(Shapes shape, Color color) {
     this.color = color;
+    this.shape = shape;
 
     switch (shape) {
       case Shapes.O:
