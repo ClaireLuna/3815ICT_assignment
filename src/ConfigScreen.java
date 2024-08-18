@@ -59,7 +59,7 @@ public class ConfigScreen {
     // Add Back button
     JButton backButton = new JButton("Back");
     backButton.addActionListener(e -> {
-      MainScreen mainScreen = new MainScreen();
+      MainScreen mainScreen = new MainScreen(frame);
       mainScreen.showMainScreen();
     }); // Go back to the main screen
     backButton.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the button

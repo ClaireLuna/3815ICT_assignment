@@ -70,7 +70,7 @@ public class ScoreScreen {
     backButton.setMaximumSize(new Dimension(200, 50));
     backButton.setFocusPainted(false);
     backButton.addActionListener(e -> {
-      MainScreen mainScreen = new MainScreen();
+      MainScreen mainScreen = new MainScreen(frame);
       mainScreen.showMainScreen();
     }); // Go back to the main screen
     panel.add(Box.createRigidArea(new Dimension(0, 20)));

@@ -8,35 +8,40 @@ public class PlayScreen {
     this.frame = frame;
   }
 
-  private JPanel renderPlayField() {
-    JPanel playField = new JPanel();
-    playField.setBackground(Color.GRAY);
-    playField.setPreferredSize(new Dimension(300, 500));
-    playField.setMaximumSize(new Dimension(300, 500));
-
-
-    return playField;
-  }
-
   public void showPlayScreen() {
-    JPanel panel = new JPanel();
-    panel.setLayout(new BorderLayout());
+    int BOARD_WIDTH = 10;
+    int BOARD_HEIGHT = 20;
+    int BLOCK_SIZE = 30;
+    frame.setSize((BOARD_WIDTH * BLOCK_SIZE) + 100, (BOARD_HEIGHT * BLOCK_SIZE) + 100);
+
+    // Create the main panel using BorderLayout
+    JPanel panel = new JPanel(new BorderLayout());
     panel.setBackground(Color.WHITE);
 
-    JPanel playField = renderPlayField();
-    panel.add(playField, BorderLayout.CENTER);
+    // Create a wrapper panel for centering the PlayField
+    JPanel centerPanel = new JPanel(new GridBagLayout());
+    centerPanel.setBackground(Color.WHITE);  // Match background to avoid visible lines
 
-    // Add Back button
+    // Create and add PlayField to the center of the centerPanel
+    PlayField playField = new PlayField(BOARD_WIDTH, BOARD_HEIGHT, BLOCK_SIZE);
+
+    // Add PlayField to the center of the center panel
+    centerPanel.add(playField);  // No need for GridBagConstraints, default centering
+
+    // Add the centerPanel to the main panel
+    panel.add(centerPanel, BorderLayout.CENTER);
+
+    // Create Back button
     JButton backButton = new JButton("Back");
-    backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
     backButton.setPreferredSize(new Dimension(200, 50));
-    backButton.setMaximumSize(new Dimension(200, 50));
     backButton.setFocusPainted(false);
     backButton.addActionListener(e -> {
-      MainScreen mainScreen = new MainScreen();
+      frame.setSize(450, 700);
+      MainScreen mainScreen = new MainScreen(frame);
       mainScreen.showMainScreen();
-    }); // Go back to the main screen
-    panel.add(Box.createRigidArea(new Dimension(0, 20)));
+    });
+
+    // Add the button directly to the bottom (BorderLayout.SOUTH)
     panel.add(backButton, BorderLayout.SOUTH);
 
     // Update the content pane
@@ -54,7 +59,6 @@ public class PlayScreen {
       frame.setLocationRelativeTo(null);
 
       PlayScreen playScreen = new PlayScreen(frame);
-      // Set the initial screen
       playScreen.showPlayScreen();
 
       frame.setVisible(true);
