@@ -59,7 +59,7 @@ public class ConfigScreen {
     // Add Back button
     JButton backButton = new JButton("Back");
     backButton.addActionListener(e -> {
-      MainScreen mainScreen = new MainScreen();
+      MainScreen mainScreen = new MainScreen(frame);
       mainScreen.showMainScreen();
     }); // Go back to the main screen
     backButton.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the button
@@ -71,6 +71,22 @@ public class ConfigScreen {
     frame.setContentPane(panel);
     frame.revalidate();
     frame.repaint();
+  }
+
+  public static void main(String[] args) {
+    SwingUtilities.invokeLater(() -> {
+      JFrame frame = new JFrame("Tetris Game");
+      frame.setTitle("Tetris Game");
+      frame.setSize(400, 600);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setLocationRelativeTo(null);
+
+      ConfigScreen configScreen = new ConfigScreen(frame);
+      // Set the initial screen
+      configScreen.showConfigScreen();
+
+      frame.setVisible(true);
+    });
   }
 
 }

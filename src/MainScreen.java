@@ -4,27 +4,18 @@ import java.awt.*;
 public class MainScreen {
   private final JFrame frame;
 
-  public MainScreen() {
-    frame = new JFrame("Tetris Game");
-    frame.setTitle("Tetris Game");
-    frame.setSize(400, 600);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setLocationRelativeTo(null);
-
-    // Set the initial screen
-    showMainScreen();
-
-    frame.setVisible(true);
+  public MainScreen(JFrame frame) {
+    this.frame = frame;
   }
 
   public void showMainScreen() {
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-    panel.setBackground(Color.BLACK);
+    panel.setBackground(Color.WHITE);
 
     JLabel logoLabel = new JLabel("TETRIS");
     logoLabel.setFont(new Font("Serif", Font.BOLD, 40));
-    logoLabel.setForeground(Color.WHITE);
+    logoLabel.setForeground(Color.BLACK);
     logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     panel.add(Box.createRigidArea(new Dimension(0, 50)));
     panel.add(logoLabel);
@@ -34,6 +25,10 @@ public class MainScreen {
     playButton.setPreferredSize(new Dimension(200, 50));
     playButton.setMaximumSize(new Dimension(200, 50));
     playButton.setFocusPainted(false);
+    playButton.addActionListener(e -> {
+      PlayScreen playScreen = new PlayScreen(frame);
+      playScreen.showPlayScreen();
+    });
     panel.add(Box.createRigidArea(new Dimension(0, 50)));
     panel.add(playButton);
 
@@ -77,6 +72,17 @@ public class MainScreen {
   }
 
   public static void main(String[] args) {
-    SwingUtilities.invokeLater(MainScreen::new);
+    SwingUtilities.invokeLater(() -> {
+      JFrame frame = new JFrame("Tetris Game");
+      frame.setTitle("Tetris Game");
+      frame.setSize(450, 700);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setLocationRelativeTo(null);
+
+      MainScreen mainScreen = new MainScreen(frame);
+      mainScreen.showMainScreen();
+
+      frame.setVisible(true);
+    });
   }
 }
