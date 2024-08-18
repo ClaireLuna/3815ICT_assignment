@@ -31,8 +31,6 @@ public class PlayScreen {
     // Add the centerPanel to the main panel
     panel.add(centerPanel, BorderLayout.CENTER);
 
-    playField.start();
-
     // Create Back button
     JButton backButton = new JButton("Back");
     backButton.setPreferredSize(new Dimension(200, 50));
@@ -50,6 +48,7 @@ public class PlayScreen {
     frame.setContentPane(panel);
     frame.revalidate();
     frame.repaint();
+    playField.start();
   }
 
   public static void main(String[] args) {

@@ -43,6 +43,7 @@ public class PlayField extends JPanel implements ActionListener {
     clearBoard();
     newPiece();
     timer.start();
+    requestFocusInWindow();
   }
 
   @Override
