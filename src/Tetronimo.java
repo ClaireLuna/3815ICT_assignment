@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.Random;
 
 public class Tetronimo {
   public static Shapes[] shapesArray = Shapes.values();
@@ -31,9 +32,12 @@ public class Tetronimo {
     }
   }
 
-  public Tetronimo(Shapes shape, Color color) {
-    this.color = color;
-    this.shape = shape;
+  public Tetronimo() {
+    Color[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.CYAN, Color.MAGENTA, Color.ORANGE};
+
+    int shapeIndex = new Random().nextInt(Tetronimo.shapesArray.length);
+    this.shape = shapesArray[shapeIndex];
+    this.color = colors[shapeIndex];
 
     switch (shape) {
       case Shapes.O:

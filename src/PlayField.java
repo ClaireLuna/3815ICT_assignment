@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
-import java.util.Random;
+import java.util.Arrays;
 
 public class PlayField extends JPanel implements ActionListener {
   private final int BOARD_WIDTH;
@@ -18,13 +18,12 @@ public class PlayField extends JPanel implements ActionListener {
   private int currentY = 0;
   private int yPosition = 0;
   private Tetronimo tetronimo;
-  private final Color[] colors = { Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.CYAN, Color.MAGENTA, Color.ORANGE };
 
   public PlayField(int BOARD_WIDTH, int BOARD_HEIGHT, int BLOCK_SIZE) {
     this.BOARD_WIDTH = BOARD_WIDTH;
     this.BOARD_HEIGHT = BOARD_HEIGHT;
     this.BLOCK_SIZE = BLOCK_SIZE;
-    board = new Color[BOARD_WIDTH][BOARD_HEIGHT];
+    board = new Color[BOARD_HEIGHT][BOARD_WIDTH];
     timer = new Timer(5, this);
     addKeyListener(new TAdapter());
 
@@ -35,7 +34,7 @@ public class PlayField extends JPanel implements ActionListener {
   }
 
   private void clearBoard() {
-    board = new Color[BOARD_WIDTH][BOARD_HEIGHT];
+    board = new Color[BOARD_HEIGHT][BOARD_WIDTH];
   }
 
   public void start() {
@@ -50,10 +49,10 @@ public class PlayField extends JPanel implements ActionListener {
   public void paint(Graphics g) {
     super.paint(g);
 
-    for (int i = 0; i < BOARD_WIDTH; i++) {
-      for (int j = 0; j < BOARD_HEIGHT; j++) {
+    for (int i = 0; i < BOARD_HEIGHT; i++) {
+      for (int j = 0; j < BOARD_WIDTH; j++) {
         if (board[i][j] != null) {
-          drawBlock(g, i * BLOCK_SIZE, j * BLOCK_SIZE, board[i][j]);
+          drawBlock(g, j * BLOCK_SIZE, i * BLOCK_SIZE, board[i][j]);
         }
       }
     }
@@ -103,7 +102,7 @@ public class PlayField extends JPanel implements ActionListener {
         return false;
       }
 
-      if (board[newX][newY] != null) {
+      if (board[newY][newX] != null) {
         System.out.println("Collision detected at: " + newX + ", " + newY);
         return false;
       }
@@ -130,7 +129,7 @@ public class PlayField extends JPanel implements ActionListener {
 
   private boolean checkFallenBlocks() {
     for (Point2D blockPosition: tetronimo.blockPositions) {
-      if (board[(int) (blockPosition.getX() + currentX)][(int) (blockPosition.getY() + currentY) + 1] != null) {
+      if (board[(int) (blockPosition.getY() + currentY) + 1][(int) (blockPosition.getX() + currentX)] != null) {
         return false;
       }
     }
@@ -139,13 +138,37 @@ public class PlayField extends JPanel implements ActionListener {
 
   private void pieceDropped() {
     for (Point2D blockPosition: tetronimo.blockPositions) {
-      board[(int) (blockPosition.getX() + currentX)][(int) (blockPosition.getY() + currentY)] = tetronimo.color;
+      board[(int) (blockPosition.getY() + currentY)][(int) (blockPosition.getX() + currentX)] = tetronimo.color;
     }
+    checkBoard();
     newPiece();
   }
 
+  private void checkBoard() {
+    for (int i = BOARD_HEIGHT - 1; i >= 0; i--) {
+      boolean canClear = true;
+
+      for (int j = 0; j < BOARD_WIDTH; j++) {
+        if (board[i][j] == null) {
+          canClear = false;
+          break;
+        }
+      }
+
+      if (canClear) {
+        for (int y = i; y > 0; y--) {
+          board[y] = Arrays.copyOf(board[y - 1], BOARD_WIDTH);
+        }
+
+        board[0] = new Color[BOARD_WIDTH];
+
+        i++;
+      }
+    }
+  }
+
   private void newPiece() {
-    tetronimo = new Tetronimo(Tetronimo.shapesArray[new Random().nextInt(Tetronimo.shapesArray.length)], colors[new Random().nextInt(colors.length)]);
+    tetronimo = new Tetronimo();
     currentX = BOARD_WIDTH / 2;
     currentY = 0;
     yPosition = 0;
