@@ -73,4 +73,20 @@ public class ConfigScreen {
     frame.repaint();
   }
 
+  public static void main(String[] args) {
+    SwingUtilities.invokeLater(() -> {
+      JFrame frame = new JFrame("Tetris Game");
+      frame.setTitle("Tetris Game");
+      frame.setSize(400, 600);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setLocationRelativeTo(null);
+
+      ConfigScreen configScreen = new ConfigScreen(frame);
+      // Set the initial screen
+      configScreen.showConfigScreen();
+
+      frame.setVisible(true);
+    });
+  }
+
 }

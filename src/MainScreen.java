@@ -20,11 +20,11 @@ public class MainScreen {
   public void showMainScreen() {
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-    panel.setBackground(Color.BLACK);
+    panel.setBackground(Color.WHITE);
 
     JLabel logoLabel = new JLabel("TETRIS");
     logoLabel.setFont(new Font("Serif", Font.BOLD, 40));
-    logoLabel.setForeground(Color.WHITE);
+    logoLabel.setForeground(Color.BLACK);
     logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     panel.add(Box.createRigidArea(new Dimension(0, 50)));
     panel.add(logoLabel);
@@ -34,6 +34,10 @@ public class MainScreen {
     playButton.setPreferredSize(new Dimension(200, 50));
     playButton.setMaximumSize(new Dimension(200, 50));
     playButton.setFocusPainted(false);
+    playButton.addActionListener(e -> {
+      PlayScreen playScreen = new PlayScreen(frame);
+      playScreen.showPlayScreen();
+    });
     panel.add(Box.createRigidArea(new Dimension(0, 50)));
     panel.add(playButton);
 
