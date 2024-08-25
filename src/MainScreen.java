@@ -61,7 +61,14 @@ public class MainScreen {
     exitButton.setPreferredSize(new Dimension(200, 50));
     exitButton.setMaximumSize(new Dimension(200, 50));
     exitButton.setFocusPainted(false);
-    exitButton.addActionListener(e -> System.exit(0));
+    exitButton.addActionListener(e -> {
+      int response = JOptionPane.showConfirmDialog(null,
+          "Are you sure you want to exit?", "Exit?",
+          JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+      if (response == JOptionPane.YES_OPTION) {
+        System.exit(0);
+      }
+    });
     panel.add(Box.createRigidArea(new Dimension(0, 20)));
     panel.add(exitButton);
 
