@@ -55,6 +55,7 @@ public class PlayScreen {
         playField.requestFocusInWindow();
       }
       else {
+        frame.setSize(450, 700);
         MainScreen mainScreen = new MainScreen(frame);
         mainScreen.showMainScreen();
       }
