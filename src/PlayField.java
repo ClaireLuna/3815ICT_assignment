@@ -19,6 +19,7 @@ public class PlayField extends JPanel implements ActionListener {
   private int currentY = 0;
   private int yPosition = 0;
   private Tetronimo tetronimo;
+  private final JLabel pauseText = new JLabel("Game Paused");
 
   public PlayField(int BOARD_WIDTH, int BOARD_HEIGHT, int BLOCK_SIZE) {
     this.BOARD_WIDTH = BOARD_WIDTH;
@@ -31,7 +32,11 @@ public class PlayField extends JPanel implements ActionListener {
     setFocusable(true);
     setBackground(Color.LIGHT_GRAY);
 
+    this.add(pauseText);
+    pauseText.setVisible(false);
+
     setPreferredSize(new Dimension(BOARD_WIDTH * BLOCK_SIZE, BOARD_HEIGHT * BLOCK_SIZE));
+    setLayout(new GridBagLayout());
   }
 
   private void clearBoard() {
@@ -203,9 +208,15 @@ public class PlayField extends JPanel implements ActionListener {
   public void pause() {
     isPaused = !isPaused;
     if (isPaused) {
+      if (!isGameEnded) {
+        pauseText.setVisible(true);
+        this.requestFocusInWindow();
+      }
       timer.stop();
     } else if (!isGameEnded) {
       timer.start();
+      pauseText.setVisible(false);
+      this.requestFocusInWindow();
     }
     repaint();
   }
@@ -221,9 +232,15 @@ public class PlayField extends JPanel implements ActionListener {
   class TAdapter extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent e) {
-      if (!isPaused) {
-        int keycode = e.getKeyCode();
 
+      int keycode = e.getKeyCode();
+
+      if (keycode == KeyEvent.VK_P) {
+        pause();
+        return;
+      }
+
+      if (!isPaused) {
         switch (keycode) {
           case KeyEvent.VK_LEFT:
             if (canMove(tetronimo, currentX - 1, currentY)) {
@@ -240,9 +257,6 @@ public class PlayField extends JPanel implements ActionListener {
             break;
           case KeyEvent.VK_UP:
             tryRotate();
-            break;
-          case KeyEvent.VK_P:
-            pause();
             break;
         }
       }
