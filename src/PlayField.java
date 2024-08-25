@@ -13,7 +13,8 @@ public class PlayField extends JPanel implements ActionListener {
   private final int BLOCK_SIZE;
   private Color[][] board;
   private final Timer timer;
-  private boolean isPaused = false;
+  public boolean isPaused = false;
+  public boolean isGameEnded = false;
   private int currentX = 0;
   private int currentY = 0;
   private int yPosition = 0;
@@ -172,6 +173,15 @@ public class PlayField extends JPanel implements ActionListener {
     currentX = BOARD_WIDTH / 2;
     currentY = 0;
     yPosition = 0;
+
+    for (Point2D blockPosition: tetronimo.blockPositions) {
+      isGameEnded = (board[(int) (blockPosition.getY() + currentY)][(int) (blockPosition.getX() + currentX)] != null);
+      break;
+    }
+
+    if (isGameEnded) {
+      timer.stop();
+    }
   }
 
   private void drawBlock(Graphics g, int x, int y, Color color) {
@@ -194,7 +204,7 @@ public class PlayField extends JPanel implements ActionListener {
     isPaused = !isPaused;
     if (isPaused) {
       timer.stop();
-    } else {
+    } else if (!isGameEnded) {
       timer.start();
     }
     repaint();
@@ -203,38 +213,39 @@ public class PlayField extends JPanel implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
     drop();
-    repaint();
+    if (!isGameEnded) {
+      repaint();
+    }
   }
 
   class TAdapter extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent e) {
+      if (!isPaused) {
+        int keycode = e.getKeyCode();
 
-      int keycode = e.getKeyCode();
-
-      switch (keycode) {
-        case KeyEvent.VK_LEFT:
-          if (canMove(tetronimo, currentX - 1, currentY)) {
-            currentX--;
-          }
-          break;
-        case KeyEvent.VK_RIGHT:
-          if (canMove(tetronimo, currentX + 1, currentY)) {
-            currentX++;
-          }
-          break;
-        case KeyEvent.VK_DOWN:
-          drop();
-          break;
-        case KeyEvent.VK_UP:
-          tryRotate();
-          break;
-        case KeyEvent.VK_P:
-          pause();
-          break;
+        switch (keycode) {
+          case KeyEvent.VK_LEFT:
+            if (canMove(tetronimo, currentX - 1, currentY)) {
+              currentX--;
+            }
+            break;
+          case KeyEvent.VK_RIGHT:
+            if (canMove(tetronimo, currentX + 1, currentY)) {
+              currentX++;
+            }
+            break;
+          case KeyEvent.VK_DOWN:
+            yPosition += BLOCK_SIZE;
+            break;
+          case KeyEvent.VK_UP:
+            tryRotate();
+            break;
+          case KeyEvent.VK_P:
+            pause();
+            break;
+        }
       }
-
-      repaint();
     }
   }
 }

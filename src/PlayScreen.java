@@ -36,9 +36,28 @@ public class PlayScreen {
     backButton.setPreferredSize(new Dimension(200, 50));
     backButton.setFocusPainted(false);
     backButton.addActionListener(e -> {
-      frame.setSize(450, 700);
-      MainScreen mainScreen = new MainScreen(frame);
-      mainScreen.showMainScreen();
+      if (!playField.isGameEnded) {
+        boolean wasPaused = playField.isPaused;
+        if (!wasPaused) {
+          playField.pause();
+        }
+        int response = JOptionPane.showConfirmDialog(null,
+            "Are you sure you want to end the game?", "End Game?",
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+          frame.setSize(450, 700);
+          MainScreen mainScreen = new MainScreen(frame);
+          mainScreen.showMainScreen();
+        }
+        else if (!wasPaused) {
+          playField.pause();
+        }
+        playField.requestFocusInWindow();
+      }
+      else {
+        MainScreen mainScreen = new MainScreen(frame);
+        mainScreen.showMainScreen();
+      }
     });
 
     // Add the button directly to the bottom (BorderLayout.SOUTH)
