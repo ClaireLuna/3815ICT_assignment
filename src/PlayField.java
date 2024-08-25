@@ -236,7 +236,7 @@ public class PlayField extends JPanel implements ActionListener {
             }
             break;
           case KeyEvent.VK_DOWN:
-            yPosition += BLOCK_SIZE;
+            drop();
             break;
           case KeyEvent.VK_UP:
             tryRotate();
