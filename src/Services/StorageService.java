@@ -64,18 +64,16 @@ public final class StorageService {
   }
 
   public void addHighScore(HighScore highScore) {
+    HighScore[] highScores = getInstance().getHighScores();
     try (FileWriter writer = new FileWriter(SCORE_FILE)) {
-      HighScore[] highScores = getHighScores();
-      HighScore[] newHighScores = new HighScore[highScores.length + 1];
-      System.arraycopy(highScores, 0, newHighScores, 0, highScores.length);
-      newHighScores[highScores.length] = highScore;
+      HighScore[] newHighScores = Arrays.copyOf(highScores, highScores.length + 1);
+      newHighScores[newHighScores.length - 1] = highScore;
 
       // Sort the high scores
       Sort sort = new Sort();
       sort.mergeSort(newHighScores, 0, newHighScores.length - 1);
 
-      // Save only the top 50 high scores
-      writer.write(new Gson().toJson(Arrays.copyOfRange(newHighScores, 0, 50)));
+      writer.write(new Gson().toJson(newHighScores));
     } catch (Exception e) {
       System.out.println("Error saving high scores:" + e.getMessage());
     }

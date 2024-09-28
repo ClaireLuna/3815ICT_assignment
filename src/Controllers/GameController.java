@@ -13,11 +13,19 @@ import java.awt.event.KeyEvent;
 public class GameController implements ActionListener {
     private final GameModel gameModel;
     private final PlayField playField;
+    private final JPanel infoPanel;
+    private final JLabel scoreLabel;
+    private final JLabel levelLabel;
+    private final JLabel linesClearedLabel;
     private final Timer timer;
 
-    public GameController(GameModel gameModel, PlayField playField) {
+    public GameController(GameModel gameModel, PlayField playField, JPanel infoPanel, JLabel scoreLabel, JLabel levelLabel, JLabel linesClearedLabel) {
         this.gameModel = gameModel;
         this.playField = playField;
+        this.infoPanel = infoPanel;
+        this.scoreLabel = scoreLabel;
+        this.levelLabel = levelLabel;
+        this.linesClearedLabel = linesClearedLabel;
         this.timer = new Timer(5, this);
         playField.addKeyListener(new TAdapter());
     }
@@ -44,6 +52,14 @@ public class GameController implements ActionListener {
             playField.requestFocusInWindow();
         }
         playField.repaint();
+        updateInfoPanel();
+    }
+
+    private void updateInfoPanel() {
+        scoreLabel.setText("Score: " + gameModel.getScore());
+        levelLabel.setText("Level: " + gameModel.getLevel());
+        linesClearedLabel.setText("Lines Cleared: " + gameModel.getTotalLinesCleared());
+        infoPanel.repaint();
     }
 
     @Override
@@ -51,6 +67,7 @@ public class GameController implements ActionListener {
         gameModel.drop();
         if (!gameModel.isGameEnded) {
             playField.repaint();
+            updateInfoPanel();
         }
     }
 

@@ -185,4 +185,16 @@ public class GameModel {
     public int getScore() {
       return score;
     }
+
+    public int getStartingLevel() {
+      return STARTING_LEVEL;
+    }
+
+    public int getLevel() {
+      return LEVEL;
+    }
+
+    public int getTotalLinesCleared() {
+      return totalLinesCleared;
+    }
 }
