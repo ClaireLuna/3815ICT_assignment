@@ -1,28 +1,18 @@
 package Views;
 
 import Models.HighScore;
-
+import Services.StorageService;
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 public class ScoreScreen {
   private final JFrame frame;
-  private final HighScore[] mockScores =
-      {
-          new HighScore(1000, "Claire"),
-          new HighScore(920, "Jeff"),
-          new HighScore(925, "Jeff"),
-          new HighScore(700, "Bobby"),
-          new HighScore(675, "Jeff"),
-          new HighScore(620, "Sam"),
-          new HighScore(520, "Gregory"),
-          new HighScore(525, "Cassandra"),
-          new HighScore(200, "Emily"),
-          new HighScore(400, "Jeff"),
-      };
+  private final HighScore[] highScores;
 
   public ScoreScreen(JFrame frame) {
     this.frame = frame;
+    highScores = Arrays.copyOfRange(StorageService.getInstance().getHighScores(), 0, 10);
   }
 
   public void showScoreScreen() {
@@ -50,7 +40,10 @@ public class ScoreScreen {
     scorePanel.add(scoreLabel);
     scorePanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-    for(HighScore score : mockScores) {
+    for (HighScore score : highScores) {
+      if (score == null) {
+        break;
+      }
       JLabel userLabel = new JLabel(score.username);
       userLabel.setForeground(Color.BLACK);
       usernamePanel.add(userLabel);

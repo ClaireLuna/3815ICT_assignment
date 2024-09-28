@@ -9,6 +9,8 @@ public class GameModel {
     private final int BOARD_WIDTH;
     private final int BOARD_HEIGHT;
     private final int BLOCK_SIZE;
+    private int LEVEL;
+    private final int STARTING_LEVEL;
     private Color[][] board;
     private Tetronimo tetronimo;
     private int currentX = 0;
@@ -16,11 +18,14 @@ public class GameModel {
     private int yPosition = 0;
     public boolean isPaused = false;
     public boolean isGameEnded = false;
+    private int score = 0;
+    private int totalLinesCleared = 0;
 
-    public GameModel(int BOARD_WIDTH, int BOARD_HEIGHT, int BLOCK_SIZE) {
+    public GameModel(int BOARD_WIDTH, int BOARD_HEIGHT, int BLOCK_SIZE, int LEVEL) {
         this.BOARD_WIDTH = BOARD_WIDTH;
         this.BOARD_HEIGHT = BOARD_HEIGHT;
         this.BLOCK_SIZE = BLOCK_SIZE;
+        this.LEVEL = this.STARTING_LEVEL = LEVEL;
         board = new Color[BOARD_HEIGHT][BOARD_WIDTH];
     }
 
@@ -57,7 +62,6 @@ public class GameModel {
     }
 
     public void drop() {
-        int LEVEL = 1;
         yPosition += LEVEL;
         currentY = (yPosition / BLOCK_SIZE);
 
@@ -93,6 +97,7 @@ public class GameModel {
     }
 
     private void checkBoard() {
+        int linesCleared = 0;
         for (int i = BOARD_HEIGHT - 1; i >= 0; i--) {
             boolean canClear = true;
 
@@ -111,8 +116,19 @@ public class GameModel {
                 board[0] = new Color[BOARD_WIDTH];
 
                 i++;
+                linesCleared++;
             }
         }
+
+        switch (linesCleared) {
+            case 1 -> score += 100;
+            case 2 -> score += 300;
+            case 3 -> score += 600;
+            case 4 -> score += 1000;
+        }
+
+        totalLinesCleared += linesCleared;
+        LEVEL = STARTING_LEVEL + (totalLinesCleared / 10);
     }
 
     public void tryRotate() {
@@ -150,19 +166,23 @@ public class GameModel {
         return yPosition;
     }
 
-  public void setCurrentX(int i) {
-    currentX = i;
-  }
+    public void setCurrentX(int i) {
+      currentX = i;
+    }
 
-  public int getBlockSize() {
-    return BLOCK_SIZE;
-  }
+    public int getBlockSize() {
+      return BLOCK_SIZE;
+    }
 
-  public int getBoardWidth() {
-    return BOARD_WIDTH;
-  }
+    public int getBoardWidth() {
+      return BOARD_WIDTH;
+    }
 
-  public int getBoardHeight() {
-    return BOARD_HEIGHT;
-  }
+    public int getBoardHeight() {
+      return BOARD_HEIGHT;
+    }
+
+    public int getScore() {
+      return score;
+    }
 }

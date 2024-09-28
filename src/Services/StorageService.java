@@ -2,10 +2,12 @@ package Services;
 
 import Models.ConfigModel;
 import Models.HighScore;
+import Models.Sort;
 import com.google.gson.Gson;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.Arrays;
 
 public final class StorageService {
   private static StorageService instance;
@@ -51,15 +53,29 @@ public final class StorageService {
       while ((i = reader.read()) != -1) {
         content.append((char) i);
       }
-      return new Gson().fromJson(content.toString(), HighScore[].class);
+
+      HighScore[] highScores = new Gson().fromJson(content.toString(), HighScore[].class);
+      Sort sort = new Sort();
+      sort.mergeSort(highScores, 0, highScores.length - 1);
+      return highScores;
     } catch (Exception e) {
-      return null;
+      return new HighScore[0];
     }
   }
 
-  public void saveHighScores(HighScore[] highScores) {
+  public void addHighScore(HighScore highScore) {
     try (FileWriter writer = new FileWriter(SCORE_FILE)) {
-      writer.write(new Gson().toJson(highScores));
+      HighScore[] highScores = getHighScores();
+      HighScore[] newHighScores = new HighScore[highScores.length + 1];
+      System.arraycopy(highScores, 0, newHighScores, 0, highScores.length);
+      newHighScores[highScores.length] = highScore;
+
+      // Sort the high scores
+      Sort sort = new Sort();
+      sort.mergeSort(newHighScores, 0, newHighScores.length - 1);
+
+      // Save only the top 50 high scores
+      writer.write(new Gson().toJson(Arrays.copyOfRange(newHighScores, 0, 50)));
     } catch (Exception e) {
       System.out.println("Error saving high scores:" + e.getMessage());
     }

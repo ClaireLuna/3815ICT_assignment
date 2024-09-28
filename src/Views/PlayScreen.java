@@ -18,6 +18,7 @@ public class PlayScreen {
         int BOARD_WIDTH = 10;
         int BOARD_HEIGHT = 20;
         int BLOCK_SIZE = 30;
+        int LEVEL = 1;
         frame.setSize((BOARD_WIDTH * BLOCK_SIZE) + 100, (BOARD_HEIGHT * BLOCK_SIZE) + 100);
 
         JPanel panel = new JPanel(new BorderLayout());
@@ -26,7 +27,7 @@ public class PlayScreen {
         JPanel centerPanel = new JPanel(new GridBagLayout());
         centerPanel.setBackground(Color.WHITE);
 
-        GameModel gameModel = new GameModel(BOARD_WIDTH, BOARD_HEIGHT, BLOCK_SIZE);
+        GameModel gameModel = new GameModel(BOARD_WIDTH, BOARD_HEIGHT, BLOCK_SIZE, LEVEL);
         PlayField playField = new PlayField(gameModel);
         GameController gameController = new GameController(gameModel, playField);
 
