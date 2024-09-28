@@ -1,3 +1,6 @@
+import Views.MainScreen;
+import Views.SplashScreen;
+
 import javax.swing.*;
 
 public class Main {

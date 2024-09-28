@@ -1,3 +1,5 @@
+package Models;
+
 public class HighScore {
   public int score;
   public String username;

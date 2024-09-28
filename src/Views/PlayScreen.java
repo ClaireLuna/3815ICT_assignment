@@ -1,3 +1,5 @@
+package Views;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -18,14 +20,14 @@ public class PlayScreen {
     JPanel panel = new JPanel(new BorderLayout());
     panel.setBackground(Color.WHITE);
 
-    // Create a wrapper panel for centering the PlayField
+    // Create a wrapper panel for centering the Views.PlayField
     JPanel centerPanel = new JPanel(new GridBagLayout());
     centerPanel.setBackground(Color.WHITE);  // Match background to avoid visible lines
 
-    // Create and add PlayField to the center of the centerPanel
+    // Create and add Views.PlayField to the center of the centerPanel
     PlayField playField = new PlayField(BOARD_WIDTH, BOARD_HEIGHT, BLOCK_SIZE);
 
-    // Add PlayField to the center of the center panel
+    // Add Views.PlayField to the center of the center panel
     centerPanel.add(playField);  // No need for GridBagConstraints, default centering
 
     // Add the centerPanel to the main panel
