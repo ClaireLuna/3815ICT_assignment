@@ -20,7 +20,7 @@ public class PlayScreen {
 
     public void showPlayScreen() {
         ConfigModel config = storageService.getConfig();
-        int BLOCK_SIZE = 30;
+        int BLOCK_SIZE = 20;
         frame.setSize((config.FIELD_WIDTH * BLOCK_SIZE) + 300, (config.FIELD_HEIGHT * BLOCK_SIZE) + 100);
 
         JPanel panel = new JPanel(new BorderLayout());
@@ -85,6 +85,9 @@ public class PlayScreen {
     private void endGame(int score) {
         if (!storageService.getConfig().AI_ON && score > 0) {
             String username = JOptionPane.showInputDialog("Enter your name:");
+            if (username == null || username.isEmpty()) {
+                username = "Player";
+            }
             storageService.addHighScore(new HighScore(username, score));
         } else if (storageService.getConfig().AI_ON && score > 0) {
             storageService.addHighScore(new HighScore("AI", score));
