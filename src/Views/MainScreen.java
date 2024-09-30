@@ -11,6 +11,8 @@ public class MainScreen {
   }
 
   public void showMainScreen() {
+    frame.setLocationRelativeTo(null);
+
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     panel.setBackground(Color.WHITE);

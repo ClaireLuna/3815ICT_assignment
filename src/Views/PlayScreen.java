@@ -5,6 +5,7 @@ import Controllers.GameController;
 import Models.ConfigModel;
 import Models.GameModel;
 import Models.HighScore;
+import Models.Mp3Player;
 import Services.StorageService;
 
 import javax.swing.*;
@@ -13,15 +14,37 @@ import java.awt.*;
 public class PlayScreen {
     private final JFrame frame;
     private final StorageService storageService = StorageService.getInstance();
+    private final Mp3Player bgMusic = new Mp3Player("src/resources/background.mp3");
+    private final Mp3Player eraseLine = new Mp3Player("src/resources/erase-line.wav");
+    private final Mp3Player gameFinish = new Mp3Player("src/resources/game-finish.wav");
+    private final Mp3Player levelUp = new Mp3Player("src/resources/level-up.wav");
+    private final Mp3Player moveOrTurn = new Mp3Player("src/resources/move-turn.wav");
+    private final Thread bgMusicThread;
+    private final Thread eraseLineThread;
+    private final Thread gameFinishThread;
+    private final Thread levelUpThread;
+    private final Thread moveOrTurnThread;
 
     public PlayScreen(JFrame frame) {
+        this.bgMusicThread = new Thread(bgMusic);
+        this.eraseLineThread = new Thread(eraseLine);
+        this.gameFinishThread = new Thread(gameFinish);
+        this.levelUpThread = new Thread(levelUp);
+        this.moveOrTurnThread = new Thread(moveOrTurn);
         this.frame = frame;
     }
 
     public void showPlayScreen() {
         ConfigModel config = storageService.getConfig();
+
+        bgMusic.setRepeat(true);
+        if (config.MUSIC_ON) {
+            bgMusicThread.start();
+        }
+
         int BLOCK_SIZE = 20;
         frame.setSize((config.FIELD_WIDTH * BLOCK_SIZE) + 300, (config.FIELD_HEIGHT * BLOCK_SIZE) + 100);
+        frame.setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
@@ -92,6 +115,7 @@ public class PlayScreen {
         } else if (storageService.getConfig().AI_ON && score > 0) {
             storageService.addHighScore(new HighScore("AI", score));
         }
+        bgMusic.stop();
         frame.setSize(450, 700);
         MainScreen mainScreen = new MainScreen(frame);
         mainScreen.showMainScreen();
