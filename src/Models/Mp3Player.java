@@ -1,5 +1,6 @@
 package Models;
 
+// JavaFX is being used instead of java zoom due to availability and compatibility issues
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
