@@ -1,7 +1,7 @@
-// src/Controllers/GameController.java
 package Controllers;
 
 import Models.GameModel;
+import Models.Mp3Player;
 import Views.PlayField;
 
 import javax.swing.*;
@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.util.Objects;
 
 public class GameController implements ActionListener {
     private final GameModel gameModel;
@@ -17,17 +19,31 @@ public class GameController implements ActionListener {
     private final JLabel scoreLabel;
     private final JLabel levelLabel;
     private final JLabel linesClearedLabel;
+    private final Mp3Player bgMusicPlayer;
+    private final Mp3Player moveOrTurnPlayer;
+    private boolean isMusicOn;
+    private boolean isSoundOn;
     private final Timer timer;
 
-    public GameController(GameModel gameModel, PlayField playField, JPanel infoPanel, JLabel scoreLabel, JLabel levelLabel, JLabel linesClearedLabel) {
+    public GameController(GameModel gameModel, PlayField playField, JPanel infoPanel, JLabel scoreLabel, JLabel levelLabel, JLabel linesClearedLabel, Mp3Player bgMusicPlayer, Thread bgMusic, boolean isMusicOn, boolean isSoundOn) {
         this.gameModel = gameModel;
         this.playField = playField;
         this.infoPanel = infoPanel;
         this.scoreLabel = scoreLabel;
         this.levelLabel = levelLabel;
+        this.bgMusicPlayer = bgMusicPlayer;
         this.linesClearedLabel = linesClearedLabel;
-        this.timer = new Timer(5, this);
+        this.isMusicOn = isMusicOn;
+        this.isSoundOn = isSoundOn;
+        this.timer = new Timer(20, this);
         playField.addKeyListener(new TAdapter());
+
+        try {
+            File moveTurnFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("resources/move-turn.wav")).toURI());
+            this.moveOrTurnPlayer = new Mp3Player(moveTurnFile);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load mp3", e);
+        }
     }
 
     public void startGame() {
@@ -62,6 +78,16 @@ public class GameController implements ActionListener {
         infoPanel.repaint();
     }
 
+    private void playMoveOrTurn() {
+        if (isSoundOn) {
+            if (moveOrTurnPlayer.isPlaying()) {
+                moveOrTurnPlayer.stop();
+            }
+            moveOrTurnPlayer.seekToStart();
+            moveOrTurnPlayer.play();
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         gameModel.drop();
@@ -79,23 +105,40 @@ public class GameController implements ActionListener {
                 pauseGame();
                 return;
             }
+
+            if (keycode == KeyEvent.VK_M) {
+                if (isMusicOn) {
+                    bgMusicPlayer.pause();
+                } else {
+                    bgMusicPlayer.resume();
+                }
+                isMusicOn = !isMusicOn;
+            }
+
+            if (keycode == KeyEvent.VK_S) {
+                isSoundOn = !isSoundOn;
+            }
+
             if (!gameModel.isPaused) {
                 switch (keycode) {
                     case KeyEvent.VK_LEFT:
                         if (gameModel.canMove(gameModel.getTetronimo(), gameModel.getCurrentX() - 1, gameModel.getCurrentY())) {
                             gameModel.setCurrentX(gameModel.getCurrentX() - 1);
                         }
+                        playMoveOrTurn();
                         break;
                     case KeyEvent.VK_RIGHT:
                         if (gameModel.canMove(gameModel.getTetronimo(), gameModel.getCurrentX() + 1, gameModel.getCurrentY())) {
                             gameModel.setCurrentX(gameModel.getCurrentX() + 1);
                         }
+                        playMoveOrTurn();
                         break;
                     case KeyEvent.VK_DOWN:
                         gameModel.drop();
                         break;
                     case KeyEvent.VK_UP:
                         gameModel.tryRotate();
+                        playMoveOrTurn();
                         break;
                 }
             }

@@ -1,4 +1,3 @@
-// src/Views/PlayScreen.java
 package Views;
 
 import Controllers.GameController;
@@ -10,36 +9,32 @@ import Services.StorageService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.util.Objects;
 
 public class PlayScreen {
     private final JFrame frame;
     private final StorageService storageService = StorageService.getInstance();
-    private final Mp3Player bgMusic = new Mp3Player("src/resources/background.mp3");
-    private final Mp3Player eraseLine = new Mp3Player("src/resources/erase-line.wav");
-    private final Mp3Player gameFinish = new Mp3Player("src/resources/game-finish.wav");
-    private final Mp3Player levelUp = new Mp3Player("src/resources/level-up.wav");
-    private final Mp3Player moveOrTurn = new Mp3Player("src/resources/move-turn.wav");
-    private final Thread bgMusicThread;
-    private final Thread eraseLineThread;
-    private final Thread gameFinishThread;
-    private final Thread levelUpThread;
-    private final Thread moveOrTurnThread;
+    private final Mp3Player bgMusicPlayer;
+    private final Thread bgMusic;
 
     public PlayScreen(JFrame frame) {
-        this.bgMusicThread = new Thread(bgMusic);
-        this.eraseLineThread = new Thread(eraseLine);
-        this.gameFinishThread = new Thread(gameFinish);
-        this.levelUpThread = new Thread(levelUp);
-        this.moveOrTurnThread = new Thread(moveOrTurn);
+        try {
+            File bgMusicFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("resources/background.mp3")).toURI());
+            this.bgMusicPlayer = new Mp3Player(bgMusicFile);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load mp3", e);
+        }
+        this.bgMusic = new Thread(bgMusicPlayer);
         this.frame = frame;
     }
 
     public void showPlayScreen() {
         ConfigModel config = storageService.getConfig();
 
-        bgMusic.setRepeat(true);
+        bgMusicPlayer.setRepeat(true);
         if (config.MUSIC_ON) {
-            bgMusicThread.start();
+            bgMusic.start();
         }
 
         int BLOCK_SIZE = 20;
@@ -67,8 +62,7 @@ public class PlayScreen {
         infoPanel.add(linesClearedLabel);
 
         PlayField playField = new PlayField(gameModel);
-        GameController gameController = new GameController(gameModel, playField, infoPanel, scoreLabel, levelLabel, linesClearedLabel);
-
+        GameController gameController = new GameController(gameModel, playField, infoPanel, scoreLabel, levelLabel, linesClearedLabel, bgMusicPlayer, bgMusic, config.MUSIC_ON, config.SOUND_ON);
 
         centerPanel.add(playField);
         panel.add(centerPanel, BorderLayout.CENTER);
@@ -84,8 +78,8 @@ public class PlayScreen {
                     gameController.pauseGame();
                 }
                 int response = JOptionPane.showConfirmDialog(null,
-                        "Are you sure you want to end the game?", "End Game?",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    "Are you sure you want to end the game?", "End Game?",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (response == JOptionPane.YES_OPTION) {
                     endGame(gameModel.getScore());
                 } else if (!wasPaused) {
@@ -115,7 +109,7 @@ public class PlayScreen {
         } else if (storageService.getConfig().AI_ON && score > 0) {
             storageService.addHighScore(new HighScore("AI", score));
         }
-        bgMusic.stop();
+        bgMusicPlayer.stop();
         frame.setSize(450, 700);
         MainScreen mainScreen = new MainScreen(frame);
         mainScreen.showMainScreen();
