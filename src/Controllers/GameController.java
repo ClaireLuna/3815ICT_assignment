@@ -21,11 +21,9 @@ public class GameController implements ActionListener {
     private final JLabel linesClearedLabel;
     private final Mp3Player bgMusicPlayer;
     private final Mp3Player moveOrTurnPlayer;
-    private boolean isMusicOn;
-    private boolean isSoundOn;
     private final Timer timer;
 
-    public GameController(GameModel gameModel, PlayField playField, JPanel infoPanel, JLabel scoreLabel, JLabel levelLabel, JLabel linesClearedLabel, Mp3Player bgMusicPlayer, Thread bgMusic, boolean isMusicOn, boolean isSoundOn) {
+    public GameController(GameModel gameModel, PlayField playField, JPanel infoPanel, JLabel scoreLabel, JLabel levelLabel, JLabel linesClearedLabel, Mp3Player bgMusicPlayer) {
         this.gameModel = gameModel;
         this.playField = playField;
         this.infoPanel = infoPanel;
@@ -33,8 +31,6 @@ public class GameController implements ActionListener {
         this.levelLabel = levelLabel;
         this.bgMusicPlayer = bgMusicPlayer;
         this.linesClearedLabel = linesClearedLabel;
-        this.isMusicOn = isMusicOn;
-        this.isSoundOn = isSoundOn;
         this.timer = new Timer(20, this);
         playField.addKeyListener(new TAdapter());
 
@@ -79,7 +75,7 @@ public class GameController implements ActionListener {
     }
 
     private void playMoveOrTurn() {
-        if (isSoundOn) {
+        if (gameModel.isSoundOn) {
             if (moveOrTurnPlayer.isPlaying()) {
                 moveOrTurnPlayer.stop();
             }
@@ -94,6 +90,11 @@ public class GameController implements ActionListener {
         if (!gameModel.isGameEnded) {
             playField.repaint();
             updateInfoPanel();
+        } else {
+            timer.stop();
+            playField.repaint();
+            updateInfoPanel();
+            bgMusicPlayer.stop();
         }
     }
 
@@ -107,16 +108,17 @@ public class GameController implements ActionListener {
             }
 
             if (keycode == KeyEvent.VK_M) {
-                if (isMusicOn) {
+                if (gameModel.isMusicOn) {
                     bgMusicPlayer.pause();
                 } else {
-                    bgMusicPlayer.resume();
+                    bgMusicPlayer.seekToStart();
+                    bgMusicPlayer.play();
                 }
-                isMusicOn = !isMusicOn;
+                gameModel.isMusicOn = !gameModel.isMusicOn;
             }
 
             if (keycode == KeyEvent.VK_S) {
-                isSoundOn = !isSoundOn;
+                gameModel.isSoundOn = !gameModel.isSoundOn;
             }
 
             if (!gameModel.isPaused) {

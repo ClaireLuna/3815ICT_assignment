@@ -3,7 +3,9 @@ package Models;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.io.File;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class GameModel {
     private final int BOARD_WIDTH;
@@ -18,15 +20,35 @@ public class GameModel {
     private int yPosition = 0;
     public boolean isPaused = false;
     public boolean isGameEnded = false;
+    public boolean isSoundOn;
+    public boolean isMusicOn;
+    private final Mp3Player lineErasePlayer;
+    private final Mp3Player levelUpPlayer;
+    private final Mp3Player gameOverPlayer;
     private int score = 0;
     private int totalLinesCleared = 0;
 
-    public GameModel(int BOARD_WIDTH, int BOARD_HEIGHT, int BLOCK_SIZE, int LEVEL) {
+    public GameModel(int BOARD_WIDTH, int BOARD_HEIGHT, int BLOCK_SIZE, int LEVEL, boolean isMusicOn, boolean isSoundOn) {
         this.BOARD_WIDTH = BOARD_WIDTH;
         this.BOARD_HEIGHT = BOARD_HEIGHT;
         this.BLOCK_SIZE = BLOCK_SIZE;
         this.LEVEL = this.STARTING_LEVEL = LEVEL;
+        this.isSoundOn = isSoundOn;
+        this.isMusicOn = isMusicOn;
         board = new Color[BOARD_HEIGHT][BOARD_WIDTH];
+
+        try {
+            File lineEraseFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("resources/erase-line.wav")).toURI());
+            this.lineErasePlayer = new Mp3Player(lineEraseFile);
+
+            File levelUpFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("resources/level-up.wav")).toURI());
+            this.levelUpPlayer = new Mp3Player(levelUpFile);
+
+            File gameOverFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("resources/game-finish.wav")).toURI());
+            this.gameOverPlayer = new Mp3Player(gameOverFile);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load mp3", e);
+        }
     }
 
     public void clearBoard() {
@@ -41,6 +63,10 @@ public class GameModel {
 
         for (Point2D blockPosition : tetronimo.blockPositions) {
             isGameEnded = (board[(int) (blockPosition.getY() + currentY)][(int) (blockPosition.getX() + currentX)] != null);
+            if (isGameEnded) {
+                playGameOver();
+                break;
+            }
             break;
         }
     }
@@ -88,14 +114,6 @@ public class GameModel {
         return true;
     }
 
-    private void pieceDropped() {
-        for (Point2D blockPosition : tetronimo.blockPositions) {
-            board[(int) (blockPosition.getY() + currentY)][(int) (blockPosition.getX() + currentX)] = tetronimo.color;
-        }
-        checkBoard();
-        newPiece();
-    }
-
     private void checkBoard() {
         int linesCleared = 0;
         for (int i = BOARD_HEIGHT - 1; i >= 0; i--) {
@@ -120,6 +138,10 @@ public class GameModel {
             }
         }
 
+        if (linesCleared > 0) {
+            playLineClear();
+        }
+
         switch (linesCleared) {
             case 1 -> score += 100;
             case 2 -> score += 300;
@@ -128,7 +150,19 @@ public class GameModel {
         }
 
         totalLinesCleared += linesCleared;
-        LEVEL = STARTING_LEVEL + (totalLinesCleared / 10);
+        int newLevel = STARTING_LEVEL + (totalLinesCleared / 10);
+        if (newLevel > LEVEL) {
+            LEVEL = newLevel;
+            playLevelUp();
+        }
+    }
+
+    private void pieceDropped() {
+        for (Point2D blockPosition : tetronimo.blockPositions) {
+            board[(int) (blockPosition.getY() + currentY)][(int) (blockPosition.getX() + currentX)] = tetronimo.color;
+        }
+        checkBoard();
+        newPiece();
     }
 
     public void tryRotate() {
@@ -167,34 +201,60 @@ public class GameModel {
     }
 
     public void setCurrentX(int i) {
-      currentX = i;
+        currentX = i;
     }
 
     public int getBlockSize() {
-      return BLOCK_SIZE;
+        return BLOCK_SIZE;
     }
 
     public int getBoardWidth() {
-      return BOARD_WIDTH;
+        return BOARD_WIDTH;
     }
 
     public int getBoardHeight() {
-      return BOARD_HEIGHT;
+        return BOARD_HEIGHT;
     }
 
     public int getScore() {
-      return score;
+        return score;
     }
 
     public int getStartingLevel() {
-      return STARTING_LEVEL;
+        return STARTING_LEVEL;
     }
 
     public int getLevel() {
-      return LEVEL;
+        return LEVEL;
     }
 
     public int getTotalLinesCleared() {
-      return totalLinesCleared;
+        return totalLinesCleared;
+    }
+
+    public void playLineClear() {
+        if (isSoundOn) {
+            if (lineErasePlayer.isPlaying()) {
+                lineErasePlayer.stop();
+            }
+            lineErasePlayer.seekToStart();
+            lineErasePlayer.play();
+        }
+    }
+
+    public void playLevelUp() {
+        if (isSoundOn) {
+            if (levelUpPlayer.isPlaying()) {
+                levelUpPlayer.stop();
+            }
+            levelUpPlayer.seekToStart();
+            levelUpPlayer.play();
+        }
+    }
+
+    private void playGameOver() {
+        if (isSoundOn) {
+            gameOverPlayer.play();
+        }
     }
 }

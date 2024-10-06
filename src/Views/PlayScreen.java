@@ -47,7 +47,7 @@ public class PlayScreen {
         JPanel centerPanel = new JPanel(new GridBagLayout());
         centerPanel.setBackground(Color.WHITE);
 
-        GameModel gameModel = new GameModel(config.FIELD_WIDTH, config.FIELD_HEIGHT, BLOCK_SIZE, config.GAME_LEVEL);
+        GameModel gameModel = new GameModel(config.FIELD_WIDTH, config.FIELD_HEIGHT, BLOCK_SIZE, config.GAME_LEVEL, config.MUSIC_ON, config.SOUND_ON);
 
         JPanel infoPanel = new JPanel(new GridLayout(4, 1));
         infoPanel.setBackground(Color.WHITE);
@@ -62,7 +62,7 @@ public class PlayScreen {
         infoPanel.add(linesClearedLabel);
 
         PlayField playField = new PlayField(gameModel);
-        GameController gameController = new GameController(gameModel, playField, infoPanel, scoreLabel, levelLabel, linesClearedLabel, bgMusicPlayer, bgMusic, config.MUSIC_ON, config.SOUND_ON);
+        GameController gameController = new GameController(gameModel, playField, infoPanel, scoreLabel, levelLabel, linesClearedLabel, bgMusicPlayer);
 
         centerPanel.add(playField);
         panel.add(centerPanel, BorderLayout.CENTER);
