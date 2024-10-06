@@ -42,6 +42,9 @@ class GameModelTest {
     assertNotNull(gameModel.getTetronimo());
     assertTrue(gameModel.getCurrentX() >= 0 && gameModel.getCurrentX() < gameModel.getBoard()[0].length);
     assertTrue(gameModel.getCurrentY() >= 0 && gameModel.getCurrentY() < gameModel.getBoard().length);
+
+    gameModel.isGameEnded = true;
+    gameModel.newPiece();
   }
 
   @Test

@@ -13,14 +13,14 @@ import java.util.Objects;
 
 public class GameController implements ActionListener {
     private final GameModel gameModel;
-    private final PlayField playField;
+    public final PlayField playField;
     private final JPanel infoPanel;
     private final JLabel scoreLabel;
     private final JLabel levelLabel;
     private final JLabel linesClearedLabel;
     private final Mp3Player bgMusicPlayer;
     private final Mp3Player moveOrTurnPlayer;
-    private final Timer timer;
+    public final Timer timer;
 
     public GameController(GameModel gameModel, PlayField playField, JPanel infoPanel, JLabel scoreLabel, JLabel levelLabel, JLabel linesClearedLabel, Mp3Player bgMusicPlayer) {
         this.gameModel = gameModel;

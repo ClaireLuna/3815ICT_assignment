@@ -7,7 +7,6 @@ import Views.PlayField;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
-
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,19 +27,34 @@ class GameControllerTest {
 
   @Test
   void startGame() {
-      GameController gameController = new GameController(mockGameModel, new PlayField(mockGameModel), new JPanel(), new JLabel(), new JLabel(), new JLabel(), bgMusicPlayer);
-      assertNotNull(gameController);
-      gameController.startGame();
-      assertNotNull(mockGameModel.getTetronimo());
-      assertEquals(Tetronimo.class, mockGameModel.getTetronimo().getClass());
+    GameController gameController = new GameController(mockGameModel, new PlayField(mockGameModel), new JPanel(), new JLabel(), new JLabel(), new JLabel(), bgMusicPlayer);
+    assertNotNull(gameController);
+    gameController.startGame();
+    assertNotNull(mockGameModel.getTetronimo());
+    assertEquals(Tetronimo.class, mockGameModel.getTetronimo().getClass());
   }
 
   @Test
   void pauseGame() {
     GameController gameController = new GameController(mockGameModel, new PlayField(mockGameModel), new JPanel(), new JLabel(), new JLabel(), new JLabel(), bgMusicPlayer);
     assertNotNull(gameController);
+    gameController.startGame();
     assertFalse(mockGameModel.isPaused);
     gameController.pauseGame();
     assertTrue(mockGameModel.isPaused);
+    gameController.pauseGame();
+    assertFalse(mockGameModel.isPaused);
+  }
+
+  @Test
+  void endGame() {
+    GameController gameController = new GameController(mockGameModel, new PlayField(mockGameModel), new JPanel(), new JLabel(), new JLabel(), new JLabel(), bgMusicPlayer);
+    gameController.startGame();
+    assertNotNull(gameController);
+    assertFalse(mockGameModel.isGameEnded);
+    assertTrue(gameController.timer.isRunning());
+    mockGameModel.isGameEnded = true;
+    gameController.actionPerformed(null);
+    assertFalse(gameController.timer.isRunning());
   }
 }
