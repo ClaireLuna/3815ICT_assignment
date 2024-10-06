@@ -110,7 +110,7 @@ public class GameModel {
         return true;
     }
 
-    private void checkBoard() {
+    void checkBoard() {
         int linesCleared = 0;
         for (int i = BOARD_HEIGHT - 1; i >= 0; i--) {
             boolean canClear = true;
