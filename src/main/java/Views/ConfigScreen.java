@@ -1,5 +1,6 @@
 package Views;
 
+import Enums.PlayerType;
 import Models.ConfigModel;
 import Services.StorageService;
 
@@ -75,15 +76,53 @@ public class ConfigScreen {
     soundEffectsCheckBox.addActionListener(e -> configModel.SOUND_ON = soundEffectsCheckBox.isSelected());
     panel.add(soundEffectsCheckBox);
 
-    // AI Play Checkbox
-    JCheckBox aiPlayCheckBox = new JCheckBox("AI Play On/Off", configModel.AI_ON);
-    aiPlayCheckBox.addActionListener(e -> configModel.AI_ON = aiPlayCheckBox.isSelected());
-    panel.add(aiPlayCheckBox);
-
     // Extend Mode Checkbox
     JCheckBox extendModeCheckBox = new JCheckBox("Extend Mode On/Off", configModel.EXTEND_ON);
-    extendModeCheckBox.addActionListener(e -> configModel.EXTEND_ON = extendModeCheckBox.isSelected());
     panel.add(extendModeCheckBox);
+
+    // Player One Type Radio Buttons
+    JLabel playerTypeLabel = new JLabel("Player One Type:");
+    ButtonGroup playerTypeGroup = new ButtonGroup();
+    JRadioButton humanRadioButton = new JRadioButton("Human", configModel.PLAYER_ONE_TYPE == PlayerType.HUMAN);
+    humanRadioButton.addActionListener(e -> {if (humanRadioButton.isSelected()) { configModel.PLAYER_ONE_TYPE = PlayerType.HUMAN; }});
+    JRadioButton aiRadioButton = new JRadioButton("AI", configModel.PLAYER_ONE_TYPE == PlayerType.AI);
+    aiRadioButton.addActionListener(e -> {if (aiRadioButton.isSelected()) { configModel.PLAYER_ONE_TYPE = PlayerType.AI; }});
+    JRadioButton externalRadioButton = new JRadioButton("External", configModel.PLAYER_ONE_TYPE == PlayerType.EXTERNAL);
+    externalRadioButton.addActionListener(e -> {if (externalRadioButton.isSelected()) { configModel.PLAYER_ONE_TYPE = PlayerType.EXTERNAL; }});
+    playerTypeGroup.add(humanRadioButton);
+    playerTypeGroup.add(aiRadioButton);
+    panel.add(playerTypeLabel);
+    panel.add(humanRadioButton);
+    panel.add(aiRadioButton);
+    panel.add(externalRadioButton);
+
+    // Player Two Type Radio Buttons
+    JLabel playerTwoTypeLabel = new JLabel("Player Two Type:");
+    ButtonGroup playerTwoTypeGroup = new ButtonGroup();
+    JRadioButton humanTwoRadioButton = new JRadioButton("Human", configModel.PLAYER_TWO_TYPE == PlayerType.HUMAN);
+    humanTwoRadioButton.addActionListener(e -> {if (humanTwoRadioButton.isSelected()) { configModel.PLAYER_TWO_TYPE = PlayerType.HUMAN; }});
+    JRadioButton aiTwoRadioButton = new JRadioButton("AI", configModel.PLAYER_TWO_TYPE == PlayerType.AI);
+    aiTwoRadioButton.addActionListener(e -> {if (aiTwoRadioButton.isSelected()) { configModel.PLAYER_TWO_TYPE = PlayerType.AI; }});
+    JRadioButton externalTwoRadioButton = new JRadioButton("External", configModel.PLAYER_TWO_TYPE == PlayerType.EXTERNAL);
+    externalTwoRadioButton.addActionListener(e -> {if (externalTwoRadioButton.isSelected()) { configModel.PLAYER_TWO_TYPE = PlayerType.EXTERNAL; }});
+    playerTwoTypeGroup.add(humanTwoRadioButton);
+    playerTwoTypeGroup.add(aiTwoRadioButton);
+    humanTwoRadioButton.setEnabled(configModel.EXTEND_ON);
+    aiTwoRadioButton.setEnabled(configModel.EXTEND_ON);
+    externalTwoRadioButton.setEnabled(configModel.EXTEND_ON);
+    panel.add(playerTwoTypeLabel);
+    panel.add(humanTwoRadioButton);
+    panel.add(aiTwoRadioButton);
+    panel.add(externalTwoRadioButton);
+
+    // Extend Mode Checkbox Action Listener
+    extendModeCheckBox.addActionListener(e -> {
+      boolean extendMode = extendModeCheckBox.isSelected();
+      configModel.EXTEND_ON = extendMode;
+      humanTwoRadioButton.setEnabled(extendMode);
+      aiTwoRadioButton.setEnabled(extendMode);
+      externalTwoRadioButton.setEnabled(extendMode);
+    });
 
     // Add Back button
     JButton backButton = new JButton("Back");

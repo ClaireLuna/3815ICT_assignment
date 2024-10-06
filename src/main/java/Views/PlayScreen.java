@@ -1,6 +1,7 @@
 package Views;
 
 import Controllers.GameController;
+import Enums.PlayerType;
 import Models.ConfigModel;
 import Models.GameModel;
 import Models.HighScore;
@@ -98,13 +99,13 @@ public class PlayScreen {
     }
 
     private void endGame(int score) {
-        if (!storageService.getConfig().AI_ON && score > 0) {
+        if (storageService.getConfig().PLAYER_ONE_TYPE != PlayerType.AI && score > 0) {
             String username = JOptionPane.showInputDialog("Enter your name:");
             if (username == null || username.isEmpty()) {
                 username = "Player";
             }
             storageService.addHighScore(new HighScore(username, score));
-        } else if (storageService.getConfig().AI_ON && score > 0) {
+        } else if (storageService.getConfig().PLAYER_ONE_TYPE == PlayerType.AI && score > 0) {
             storageService.addHighScore(new HighScore("AI", score));
         }
         bgMusicPlayer.stop();
