@@ -17,7 +17,7 @@ public final class StorageService {
   private StorageService() {
   }
 
-  public static StorageService getInstance() {
+  public static synchronized StorageService getInstance() {
     if (instance == null) {
       instance = new StorageService();
     }
