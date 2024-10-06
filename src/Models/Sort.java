@@ -27,7 +27,7 @@ public class Sort {
 
     while (i < low && j < high)                     //merge the left and right subarrays
     {
-      if (L[i].score > R[j].score)
+      if (L[i].compareTo(R[j]) > 0)
       {
         arr[k] = L[i];
         i++;
