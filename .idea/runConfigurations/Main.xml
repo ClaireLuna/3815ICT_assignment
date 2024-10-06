@@ -4,6 +4,7 @@
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="Main" />
     <module name="3815ICT" />
+    <option name="PROGRAM_PARAMETERS" value="-Djava.library.path=&quot;javafx-sdk-11.0.2/bin&quot; " />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
