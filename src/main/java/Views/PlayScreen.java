@@ -48,15 +48,17 @@ public class PlayScreen {
 
         GameModel gameModel = new GameModel(config.FIELD_WIDTH, config.FIELD_HEIGHT, BLOCK_SIZE, config.GAME_LEVEL, config.MUSIC_ON, config.SOUND_ON);
 
-        JPanel infoPanel = new JPanel(new GridLayout(4, 1));
+        JPanel infoPanel = new JPanel(new GridLayout(5, 1));
         infoPanel.setBackground(Color.WHITE);
         infoPanel.setPreferredSize(new Dimension(200, 0));
-        JLabel scoreLabel = new JLabel("Score: " + gameModel.getScore());
-        infoPanel.add(scoreLabel);
+        JLabel playerLabel = new JLabel("Player Type: " + (config.PLAYER_ONE_TYPE == PlayerType.AI ? "AI" : config.PLAYER_ONE_TYPE == PlayerType.HUMAN ? "Human" : "External"));
+        infoPanel.add(playerLabel);
         JLabel startingLevelLabel = new JLabel("Initial Level: " + gameModel.getStartingLevel());
         infoPanel.add(startingLevelLabel);
-        JLabel levelLabel = new JLabel("Level: " + gameModel.getLevel());
+        JLabel levelLabel = new JLabel("Current Level: " + gameModel.getLevel());
         infoPanel.add(levelLabel);
+        JLabel scoreLabel = new JLabel("Score: " + gameModel.getScore());
+        infoPanel.add(scoreLabel);
         JLabel linesClearedLabel = new JLabel("Lines Cleared: " + gameModel.getTotalLinesCleared());
         infoPanel.add(linesClearedLabel);
 
