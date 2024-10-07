@@ -16,6 +16,22 @@ public class ConfigScreen {
     this.configModel = StorageService.getInstance().getConfig();
   }
 
+  public static void main(String[] args) {
+    SwingUtilities.invokeLater(() -> {
+      JFrame frame = new JFrame("Tetris Game");
+      frame.setTitle("Tetris Game");
+      frame.setSize(400, 600);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setLocationRelativeTo(null);
+
+      ConfigScreen configScreen = new ConfigScreen(frame);
+      // Set the initial screen
+      configScreen.showConfigScreen();
+
+      frame.setVisible(true);
+    });
+  }
+
   public void showConfigScreen() {
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -84,11 +100,23 @@ public class ConfigScreen {
     JLabel playerTypeLabel = new JLabel("Player One Type:");
     ButtonGroup playerTypeGroup = new ButtonGroup();
     JRadioButton humanRadioButton = new JRadioButton("Human", configModel.PLAYER_ONE_TYPE == PlayerType.HUMAN);
-    humanRadioButton.addActionListener(e -> {if (humanRadioButton.isSelected()) { configModel.PLAYER_ONE_TYPE = PlayerType.HUMAN; }});
+    humanRadioButton.addActionListener(e -> {
+      if (humanRadioButton.isSelected()) {
+        configModel.PLAYER_ONE_TYPE = PlayerType.HUMAN;
+      }
+    });
     JRadioButton aiRadioButton = new JRadioButton("AI", configModel.PLAYER_ONE_TYPE == PlayerType.AI);
-    aiRadioButton.addActionListener(e -> {if (aiRadioButton.isSelected()) { configModel.PLAYER_ONE_TYPE = PlayerType.AI; }});
+    aiRadioButton.addActionListener(e -> {
+      if (aiRadioButton.isSelected()) {
+        configModel.PLAYER_ONE_TYPE = PlayerType.AI;
+      }
+    });
     JRadioButton externalRadioButton = new JRadioButton("External", configModel.PLAYER_ONE_TYPE == PlayerType.EXTERNAL);
-    externalRadioButton.addActionListener(e -> {if (externalRadioButton.isSelected()) { configModel.PLAYER_ONE_TYPE = PlayerType.EXTERNAL; }});
+    externalRadioButton.addActionListener(e -> {
+      if (externalRadioButton.isSelected()) {
+        configModel.PLAYER_ONE_TYPE = PlayerType.EXTERNAL;
+      }
+    });
     playerTypeGroup.add(humanRadioButton);
     playerTypeGroup.add(aiRadioButton);
     panel.add(playerTypeLabel);
@@ -100,11 +128,23 @@ public class ConfigScreen {
     JLabel playerTwoTypeLabel = new JLabel("Player Two Type:");
     ButtonGroup playerTwoTypeGroup = new ButtonGroup();
     JRadioButton humanTwoRadioButton = new JRadioButton("Human", configModel.PLAYER_TWO_TYPE == PlayerType.HUMAN);
-    humanTwoRadioButton.addActionListener(e -> {if (humanTwoRadioButton.isSelected()) { configModel.PLAYER_TWO_TYPE = PlayerType.HUMAN; }});
+    humanTwoRadioButton.addActionListener(e -> {
+      if (humanTwoRadioButton.isSelected()) {
+        configModel.PLAYER_TWO_TYPE = PlayerType.HUMAN;
+      }
+    });
     JRadioButton aiTwoRadioButton = new JRadioButton("AI", configModel.PLAYER_TWO_TYPE == PlayerType.AI);
-    aiTwoRadioButton.addActionListener(e -> {if (aiTwoRadioButton.isSelected()) { configModel.PLAYER_TWO_TYPE = PlayerType.AI; }});
+    aiTwoRadioButton.addActionListener(e -> {
+      if (aiTwoRadioButton.isSelected()) {
+        configModel.PLAYER_TWO_TYPE = PlayerType.AI;
+      }
+    });
     JRadioButton externalTwoRadioButton = new JRadioButton("External", configModel.PLAYER_TWO_TYPE == PlayerType.EXTERNAL);
-    externalTwoRadioButton.addActionListener(e -> {if (externalTwoRadioButton.isSelected()) { configModel.PLAYER_TWO_TYPE = PlayerType.EXTERNAL; }});
+    externalTwoRadioButton.addActionListener(e -> {
+      if (externalTwoRadioButton.isSelected()) {
+        configModel.PLAYER_TWO_TYPE = PlayerType.EXTERNAL;
+      }
+    });
     playerTwoTypeGroup.add(humanTwoRadioButton);
     playerTwoTypeGroup.add(aiTwoRadioButton);
     humanTwoRadioButton.setEnabled(configModel.EXTEND_ON);
@@ -140,22 +180,6 @@ public class ConfigScreen {
     frame.setContentPane(panel);
     frame.revalidate();
     frame.repaint();
-  }
-
-  public static void main(String[] args) {
-    SwingUtilities.invokeLater(() -> {
-      JFrame frame = new JFrame("Tetris Game");
-      frame.setTitle("Tetris Game");
-      frame.setSize(400, 600);
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setLocationRelativeTo(null);
-
-      ConfigScreen configScreen = new ConfigScreen(frame);
-      // Set the initial screen
-      configScreen.showConfigScreen();
-
-      frame.setVisible(true);
-    });
   }
 
 }

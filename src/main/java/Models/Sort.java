@@ -1,8 +1,7 @@
 package Models;
 
 public class Sort {
-  void merge(HighScore[] arr, int left, int middle, int right)
-  {
+  void merge(HighScore[] arr, int left, int middle, int right) {
     int low = middle - left + 1;                    //size of the left subarray
     int high = right - middle;                      //size of the right subarray
 
@@ -27,13 +26,10 @@ public class Sort {
 
     while (i < low && j < high)                     //merge the left and right subarrays
     {
-      if (L[i].compareTo(R[j]) > 0)
-      {
+      if (L[i].compareTo(R[j]) > 0) {
         arr[k] = L[i];
         i++;
-      }
-      else
-      {
+      } else {
         arr[k] = R[j];
         j++;
       }

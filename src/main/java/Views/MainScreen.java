@@ -10,6 +10,21 @@ public class MainScreen {
     this.frame = frame;
   }
 
+  public static void main(String[] args) {
+    SwingUtilities.invokeLater(() -> {
+      JFrame frame = new JFrame("Tetris Game");
+      frame.setTitle("Tetris Game");
+      frame.setSize(450, 700);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setLocationRelativeTo(null);
+
+      MainScreen mainScreen = new MainScreen(frame);
+      mainScreen.showMainScreen();
+
+      frame.setVisible(true);
+    });
+  }
+
   public void showMainScreen() {
     frame.setLocationRelativeTo(null);
 
@@ -80,20 +95,5 @@ public class MainScreen {
     frame.setContentPane(panel);
     frame.revalidate();
     frame.repaint();
-  }
-
-  public static void main(String[] args) {
-    SwingUtilities.invokeLater(() -> {
-      JFrame frame = new JFrame("Tetris Game");
-      frame.setTitle("Tetris Game");
-      frame.setSize(450, 700);
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setLocationRelativeTo(null);
-
-      MainScreen mainScreen = new MainScreen(frame);
-      mainScreen.showMainScreen();
-
-      frame.setVisible(true);
-    });
   }
 }

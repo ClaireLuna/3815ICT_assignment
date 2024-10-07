@@ -12,6 +12,11 @@ public class SplashScreen extends JWindow {
     this.duration = duration;
   }
 
+  public static void main(String[] args) {
+    SplashScreen splashScreen = new SplashScreen(5000);
+    splashScreen.showSplashAndExit();
+  }
+
   public void showSplash() {
     JPanel content = (JPanel) getContentPane();
     JPanel textPanel = new JPanel(new BorderLayout());
@@ -53,11 +58,6 @@ public class SplashScreen extends JWindow {
   public void showSplashAndExit() {
     showSplash();
     System.exit(0);
-  }
-
-  public static void main(String[] args) {
-    SplashScreen splashScreen = new SplashScreen(5000);
-    splashScreen.showSplashAndExit();
   }
 
 }

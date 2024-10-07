@@ -24,12 +24,11 @@ class GameControllerTest {
       this.bgMusicPlayer =
           new Mp3Player(Objects.requireNonNull(getClass().getClassLoader()
               .getResource("background.mp3")).openStream());
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       fail("Failed to load mp3", e);
     }
 
-    mockGameModel= new
+    mockGameModel = new
         GameModel(10, 10, 10, 1, true, true);
     gameController = new
         GameController(mockGameModel, new PlayField(mockGameModel),

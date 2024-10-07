@@ -10,10 +10,10 @@ import java.io.InputStream;
 import java.nio.file.Files;
 
 public class Mp3Player implements Runnable {
+  private final Media media;
   private MediaPlayer mediaPlayer;
   private boolean isPaused;
   private boolean repeat;
-  private final Media media;
 
   public Mp3Player(InputStream inputStream) throws Exception {
     // Initialize JavaFX runtime

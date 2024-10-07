@@ -22,16 +22,6 @@ public class Tetronimo {
     }
   }
 
-  public void rotate() {
-    if (shape != Shapes.O) {
-      for (Point2D blockPosition : blockPositions) {
-        double x = blockPosition.getX();
-        double y = blockPosition.getY();
-        blockPosition.setLocation(-y, x);
-      }
-    }
-  }
-
   public Tetronimo() {
     Color[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.CYAN, Color.MAGENTA, Color.ORANGE};
 
@@ -96,6 +86,16 @@ public class Tetronimo {
             new Point2D.Double(0, 1),
         };
         break;
+    }
+  }
+
+  public void rotate() {
+    if (shape != Shapes.O) {
+      for (Point2D blockPosition : blockPositions) {
+        double x = blockPosition.getX();
+        double y = blockPosition.getY();
+        blockPosition.setLocation(-y, x);
+      }
     }
   }
 }

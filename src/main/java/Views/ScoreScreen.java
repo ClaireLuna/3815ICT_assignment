@@ -2,6 +2,7 @@ package Views;
 
 import Models.HighScore;
 import Services.StorageService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
@@ -13,6 +14,22 @@ public class ScoreScreen {
   public ScoreScreen(JFrame frame) {
     this.frame = frame;
     highScores = Arrays.copyOfRange(StorageService.getInstance().getHighScores(), 0, 10);
+  }
+
+  public static void main(String[] args) {
+    SwingUtilities.invokeLater(() -> {
+      JFrame frame = new JFrame("Tetris Game");
+      frame.setTitle("Tetris Game");
+      frame.setSize(400, 600);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setLocationRelativeTo(null);
+
+      ScoreScreen scoreScreen = new ScoreScreen(frame);
+      // Set the initial screen
+      scoreScreen.showScoreScreen();
+
+      frame.setVisible(true);
+    });
   }
 
   public void showScoreScreen() {
@@ -77,23 +94,6 @@ public class ScoreScreen {
     frame.setContentPane(panel);
     frame.revalidate();
     frame.repaint();
-  }
-
-
-  public static void main(String[] args) {
-    SwingUtilities.invokeLater(() -> {
-      JFrame frame = new JFrame("Tetris Game");
-      frame.setTitle("Tetris Game");
-      frame.setSize(400, 600);
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setLocationRelativeTo(null);
-
-      ScoreScreen scoreScreen = new ScoreScreen(frame);
-      // Set the initial screen
-      scoreScreen.showScoreScreen();
-
-      frame.setVisible(true);
-    });
   }
 
 }
