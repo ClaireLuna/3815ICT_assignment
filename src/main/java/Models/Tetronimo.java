@@ -1,5 +1,7 @@
 package Models;
 
+import Enums.Shapes;
+
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Random;
@@ -18,10 +20,6 @@ public class Tetronimo {
     for (int i = 0; i < tetronimo.blockPositions.length; i++) {
       this.blockPositions[i] = (Point2D) tetronimo.blockPositions[i].clone();
     }
-  }
-
-  public enum Shapes {
-    O, I, S, Z, L, J, T
   }
 
   public void rotate() {
