@@ -4,6 +4,7 @@ import Models.GameModel;
 import Models.Mp3Player;
 import Models.Tetronimo;
 import Views.PlayField;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -13,21 +14,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameControllerTest {
 
-  private final GameModel mockGameModel = new GameModel(10, 10, 10, 1, true, true);
+  private GameModel mockGameModel;
+  private GameController gameController;
   private Mp3Player bgMusicPlayer;
 
-  public GameControllerTest() {
+  @BeforeEach
+  void setUp() {
     try {
       this.bgMusicPlayer = new Mp3Player(Objects.requireNonNull(getClass().getClassLoader().getResource("background.mp3")).openStream());
     }
     catch (Exception e) {
       fail("Failed to load mp3", e);
     }
+
+    mockGameModel= new GameModel(10, 10, 10, 1, true, true);
+    gameController = new GameController(mockGameModel, new PlayField(mockGameModel), new JPanel(), new JLabel(), new JLabel(), new JLabel(), bgMusicPlayer);
   }
 
   @Test
   void startGame() {
-    GameController gameController = new GameController(mockGameModel, new PlayField(mockGameModel), new JPanel(), new JLabel(), new JLabel(), new JLabel(), bgMusicPlayer);
     assertNotNull(gameController);
     gameController.startGame();
     assertNotNull(mockGameModel.getTetronimo());
@@ -36,7 +41,6 @@ class GameControllerTest {
 
   @Test
   void pauseGame() {
-    GameController gameController = new GameController(mockGameModel, new PlayField(mockGameModel), new JPanel(), new JLabel(), new JLabel(), new JLabel(), bgMusicPlayer);
     assertNotNull(gameController);
     gameController.startGame();
     assertFalse(mockGameModel.isPaused);
@@ -48,7 +52,6 @@ class GameControllerTest {
 
   @Test
   void endGame() {
-    GameController gameController = new GameController(mockGameModel, new PlayField(mockGameModel), new JPanel(), new JLabel(), new JLabel(), new JLabel(), bgMusicPlayer);
     gameController.startGame();
     assertNotNull(gameController);
     assertFalse(mockGameModel.isGameEnded);
