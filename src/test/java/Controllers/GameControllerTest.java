@@ -2,7 +2,7 @@ package Controllers;
 
 import Models.GameModel;
 import Models.Mp3Player;
-import Models.Tetronimos.TetronimoFactory;
+import Factories.TetronimoFactory;
 import Views.PlayField;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

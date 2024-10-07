@@ -1,6 +1,7 @@
-package Models.Tetronimos;
+package Factories;
 
 import Interfaces.ITetronimo;
+import Models.Tetronimos.TetronimoT;
 
 public class CreateTetronimoT extends TetronimoFactory {
   @Override

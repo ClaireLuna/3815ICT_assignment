@@ -1,4 +1,4 @@
-package Models.Tetronimos;
+package Factories;
 
 import Enums.Shapes;
 import Interfaces.ITetronimo;

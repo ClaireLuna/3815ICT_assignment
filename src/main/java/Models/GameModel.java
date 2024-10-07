@@ -2,7 +2,7 @@
 package Models;
 
 import Interfaces.ITetronimo;
-import Models.Tetronimos.TetronimoFactory;
+import Factories.TetronimoFactory;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
