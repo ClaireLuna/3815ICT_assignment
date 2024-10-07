@@ -2,7 +2,7 @@ package Controllers;
 
 import Models.GameModel;
 import Models.Mp3Player;
-import Models.Tetronimo;
+import Models.Tetronimos.TetronimoFactory;
 import Views.PlayField;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ class GameControllerTest {
     assertNotNull(gameController);
     gameController.startGame();
     assertNotNull(mockGameModel.getTetronimo());
-    assertEquals(Tetronimo.class, mockGameModel.getTetronimo().getClass());
+    assertEquals(TetronimoFactory.class, mockGameModel.getTetronimo().getClass());
   }
 
   @Test

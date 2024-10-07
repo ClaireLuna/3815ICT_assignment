@@ -1,6 +1,9 @@
 // src/Models/GameModel.java
 package Models;
 
+import Interfaces.ITetronimo;
+import Models.Tetronimos.TetronimoFactory;
+
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
@@ -20,7 +23,7 @@ public class GameModel {
   public boolean isMusicOn;
   private int LEVEL;
   private Color[][] board;
-  private Tetronimo tetronimo;
+  private ITetronimo tetronimo;
   private int currentX = 0;
   private int currentY = 0;
   private int yPosition = 0;
@@ -52,12 +55,13 @@ public class GameModel {
   }
 
   public void newPiece() {
-    tetronimo = new Tetronimo();
+    TetronimoFactory tetronimoFactory = TetronimoFactory.getRandomTetronimo();
+    tetronimo = tetronimoFactory.createTetronimo();
     currentX = BOARD_WIDTH / 2;
     currentY = 0;
     yPosition = 0;
 
-    for (Point2D blockPosition : tetronimo.blockPositions) {
+    for (Point2D blockPosition : tetronimo.getBlockPositions()) {
       isGameEnded = (board[(int) (blockPosition.getY() + currentY)][(int) (blockPosition.getX() + currentX)] != null);
       if (isGameEnded) {
         playGameOver();
@@ -67,8 +71,8 @@ public class GameModel {
     }
   }
 
-  public boolean canMove(Tetronimo tetronimo, int x, int y) {
-    for (Point2D blockPosition : tetronimo.blockPositions) {
+  public boolean canMove(ITetronimo tetronimo, int x, int y) {
+    for (Point2D blockPosition : tetronimo.getBlockPositions()) {
       int newX = (int) (blockPosition.getX() + x);
       int newY = (int) (blockPosition.getY() + y);
 
@@ -93,7 +97,7 @@ public class GameModel {
   }
 
   private boolean tryDrop() {
-    for (Point2D blockPosition : tetronimo.blockPositions) {
+    for (Point2D blockPosition : tetronimo.getBlockPositions()) {
       if (((int) blockPosition.getY() + currentY) >= BOARD_HEIGHT - 1) {
         return false;
       }
@@ -102,7 +106,7 @@ public class GameModel {
   }
 
   private boolean checkFallenBlocks() {
-    for (Point2D blockPosition : tetronimo.blockPositions) {
+    for (Point2D blockPosition : tetronimo.getBlockPositions()) {
       if (board[(int) (blockPosition.getY() + currentY) + 1][(int) (blockPosition.getX() + currentX)] != null) {
         return false;
       }
@@ -154,25 +158,26 @@ public class GameModel {
   }
 
   private void pieceDropped() {
-    for (Point2D blockPosition : tetronimo.blockPositions) {
-      board[(int) (blockPosition.getY() + currentY)][(int) (blockPosition.getX() + currentX)] = tetronimo.color;
+    for (Point2D blockPosition : tetronimo.getBlockPositions()) {
+      board[(int) (blockPosition.getY() + currentY)][(int) (blockPosition.getX() + currentX)] = tetronimo.getColor();
     }
     checkBoard();
     newPiece();
   }
 
   public void tryRotate() {
-    Tetronimo rotatedTetronimo = new Tetronimo(tetronimo);
-    rotatedTetronimo.rotate();
+    tetronimo.rotate();
 
-    if (canMove(rotatedTetronimo, currentX, currentY)) {
-      tetronimo = rotatedTetronimo;
-    } else if (canMove(rotatedTetronimo, currentX + 1, currentY)) {
+    if (canMove(tetronimo, currentX, currentY)) {
+      return;
+    } else if (canMove(tetronimo, currentX + 1, currentY)) {
       currentX += 1;
-      tetronimo = rotatedTetronimo;
-    } else if (canMove(rotatedTetronimo, currentX - 1, currentY)) {
+    } else if (canMove(tetronimo, currentX - 1, currentY)) {
       currentX -= 1;
-      tetronimo = rotatedTetronimo;
+    } else {
+      tetronimo.rotate();
+      tetronimo.rotate();
+      tetronimo.rotate();
     }
   }
 
@@ -180,7 +185,7 @@ public class GameModel {
     return board;
   }
 
-  public Tetronimo getTetronimo() {
+  public ITetronimo getTetronimo() {
     return tetronimo;
   }
 

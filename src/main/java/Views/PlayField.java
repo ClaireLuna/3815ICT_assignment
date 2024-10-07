@@ -57,8 +57,8 @@ public class PlayField extends JPanel {
   }
 
   private void drawTetronimo(Graphics g) {
-    for (Point2D blockPosition : gameModel.getTetronimo().blockPositions) {
-      g.setColor(gameModel.getTetronimo().color);
+    for (Point2D blockPosition : gameModel.getTetronimo().getBlockPositions()) {
+      g.setColor(gameModel.getTetronimo().getColor());
       g.fillRect(((int) blockPosition.getX() + gameModel.getCurrentX()) * BLOCK_SIZE, ((int) blockPosition.getY() * BLOCK_SIZE) + gameModel.getYPosition(), BLOCK_SIZE, BLOCK_SIZE);
       g.setColor(Color.BLACK);
       g.drawRect(((int) blockPosition.getX() + gameModel.getCurrentX()) * BLOCK_SIZE, ((int) blockPosition.getY() * BLOCK_SIZE) + gameModel.getYPosition(), BLOCK_SIZE, BLOCK_SIZE);
