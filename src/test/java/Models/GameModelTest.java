@@ -13,7 +13,8 @@ class GameModelTest {
 
   @BeforeEach
   void setUp() {
-    gameModel = new GameModel(10, 20, 30, 1, true, true);
+    gameModel = new
+        GameModel(10, 20, 30, 1, true, true);
   }
 
   @Test
@@ -66,6 +67,7 @@ class GameModelTest {
     for (int i = 0; i < gameModel.getBoard()[0].length; i++) {
       assertNull(gameModel.getBoard()[0][i]);
     }
+    assertEquals(100, gameModel.getScore());
   }
 
   @Test
